@@ -1,96 +1,25 @@
 <!DOCTYPE html>
 
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset=utf-8 />
-        <title>A simple map</title>
+        <title>Biomass</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
     <script src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
     <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+    <script src='js/biomass.js'></script>
     <style>
       body { margin:0; padding:0; }
       #map { position:absolute; top:0; bottom:0; width:100%; }
     </style>
+
 </head>
 
 <body>
     <div id='map'></div>
-<script>
-// ****DEFINE VARIABLES
-var map = "";
-var facilities = [];
-var ports = [];
-var sebuffer = [];
-var facilityStyle = {
-    "title": "Virginia earthquake 2011 - mag. 5.8",
-    "description": "No deaths, minor injuries. Damage to buildings reported.",
-    "marker-symbol": "star",
-    "marker-size": "medium",
-    "marker-color": "#f44"
-}
 
-$( document ).ready(function() {
-    loadLayers();
-}); 
-
-// ****AJAX CALL
-
-function loadLayers () { 
-    $.ajax({
-            type:"GET",
-            url:"biomass_data/facilities_pellet_all.geojson",
-            dataType:"text",
-            success: parseHistory
-    });   
-
-    function parseHistory(data){
-        console.log("success")
-        //create an object from the JSON file
-        facilities = $.parseJSON(data);
-        console.log(facilities);
-        /*for (var i=0; i < dataObj.length; i++) {        
-            dates.push(dataObj[i].Year);
-            titles.push(dataObj[i].Title);
-            descriptions.push(dataObj[i].Desc);
-            links.push(dataObj[i].Link);
-        }*/
-        buildMap();
-    }
-}
-    
-//****** BUILDING MAP
-
-function buildMap() {
-    L.mapbox.accessToken = 'pk.eyJ1IjoiZWxjdXJyIiwiYSI6IkZMekZlUEEifQ.vsXDy4z_bxRXyhSIvBXc2A';  
-    
-    map = L.mapbox.map('map', 'elcurr.l23a6ne8')
-        .setView([30.6190, -84.7266], 5)
-        
-    ports = omnivore.geojson('biomass_data/ports_of_export.geojson').addTo(map);
-    //omnivore.geojson('biomass_data/facilities_pellet_all.geojson').addTo(map);
-    
-    omnivore.geojson('biomass_data/buffer_mask_se.geojson').addTo(map);
-    
-    facilities = L.mapbox.featureLayer(facilities).addTo(map);
-    facilities.setStyle(facilityStyle);
-    
-    
-    facilities.eachLayer(function(layer) {
-    // here you call `bindPopup` with a string of HTML you create - the feature
-    // properties declared above are available under `layer.feature.properties`
-    var content = '<h2>'+layer.feature.properties.plant_name+'<\/h2>' +
-        '<p>Status: ' + layer.feature.properties.status + '<br \/>' +
-        'status: ' + layer.feature.properties.status + '<\/p>';
-    layer.bindPopup(content);
-    });
-
-}
-    
-
-</script>
 </body>
 </html>
 
