@@ -4,6 +4,8 @@ var data = ["biomass_data/facilities_pellet_all.geojson", "biomass_data/ports_of
 var facilities = [];
 var ports = [];
 var plantList = document.getElementById('plant-list');
+var facilitiesLayer = 'biomass_data/facilities_pellet_all.geojson'
+
 
 $( document ).ready(function() {
     loadLayers()
@@ -32,6 +34,7 @@ function buildMap() {
     map = L.mapbox.map('map', 'elcurr.l23a6ne8')
         .setView([33.6190, -84.7266], 6)
         
+    
     //// ADDING PORTS
     ports = omnivore.geojson('biomass_data/ports_of_export.geojson')
     .on('ready', function(go) {
@@ -39,7 +42,7 @@ function buildMap() {
                 var content = '<h2>Port<\/h2>';
                 marker.bindPopup(content);
                 marker.setIcon(L.mapbox.marker.icon({
-                        'marker-color': '#2A45FF',
+                        'marker-color': '#052945',
                         'marker-size': 'small',
                         'marker-symbol': 'ferry'
                     }));
@@ -47,27 +50,37 @@ function buildMap() {
     })
     .addTo(map);
     
+    toggleLayers()
+}
+    
     //// ADDING WOOD PELLET FACILITIES
-    facilities = omnivore.geojson('biomass_data/facilities_pellet_all.geojson')
+function addFacilities() { 
+    facilities = omnivore.geojson(facilitiesLayer)
         .on('ready', function(go) {
             this.eachLayer(function(marker) {
                 
                 //// SETTING TOOLTIP & LABEL CONTENTS
                 var content = '<h2>'+marker.feature.properties.plant_name+'<\/h2>'
-                    + '<p>Status: ' + marker.feature.properties.status + '<br \/>'
-                    +'Nearest City: ' + marker.feature.properties.city_near + '<\/p>'
-                    + 'Notes: ' + marker.feature.properties.notes + '</br>'
-                    + 'Website: <a href = \' '+ marker.feature.properties.website + ' \'>' + marker.feature.properties.website + '</a>' ;
-                var label = '<h2>'+marker.feature.properties.map_label+'<\/h2>';
-                marker.bindPopup(label);
+                    + '<p>Status: ' + marker.feature.properties.status + '</br>'
+                    +'Nearest City: ' + marker.feature.properties.city_near + '</p>'
+                    + '<p>Notes: ' + marker.feature.properties.notes + '</br>'
+                    + 'Website: <a href = " '+ marker.feature.properties.website + ' " target="_blank">' + marker.feature.properties.website + '</a></p>' ;
+                
+                marker.bindPopup(marker.feature.properties.map_label, {closeButton: false});
+                
+                //marker.bindLabel(marker.feature.properties.map_label, {className: "hovertip", direction: 'auto'})
                 
                 marker.on('mouseover', function() {
-                    marker.openPopup(marker.feature.properties.map_label);
+                    marker.openPopup();
                 });
+                /*marker.on('mouseout', function() {
+                    marker.closePopup();
+                })*/;
                 
                 //// ADDING PLANT NAMES TO DROPDOWN LIST
                 
                 plantList = document.getElementById('plant-list').appendChild(document.createElement('li'));
+                plantList.className = 'droplist';
                 plantList.innerHTML = marker.feature.properties.plant_name;                
                 plantList.onclick = function() {
                     marker.bindPopup(content);
@@ -90,12 +103,12 @@ function buildMap() {
                     // simplestyle-spec: see that specification for a full
                     // description of options.
                     marker.setIcon(L.mapbox.marker.icon({
-                        'marker-color': '#54CC14',
+                        'marker-color': '#911815',
                         'marker-size': 'small'
                     }));
                 } else {
                     marker.setIcon(L.mapbox.marker.icon({
-                        'marker-color': '#FFE137',
+                        'marker-color': '#E85118',
                         'marker-size': 'small'
                     }));
                 }
@@ -104,16 +117,17 @@ function buildMap() {
         
         ////DRAWING FEATURES TO MAP
         .addTo(map);
-    
-    
-    facilities.eachLayer(function(layer) {
-        var content = '<h2>'+layer.feature.properties.plant_name+'<\/h2>' +
-            '<p>Status: ' + layer.feature.properties.status + '<br \/>' +
-            'Nearest City: ' + layer.feature.properties.city_near + '<\/p>';
-        layer.bindPopup(content);
-        });
+
     
 
+}
+
+function toggleLayers(){
+    console.log("toggling")
+    if (document.getElementById('operating').checked) {
+        facilitiesLayer= 'biomass_data/facilties_pellet_operating.geojson'
+    }
+    addFacilities()
 }
 
     

@@ -15,28 +15,69 @@
     <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
     <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+    <!-- LEAFLET PLUGINS -->
+    <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet' />  
     <!--MY JS-->
     <script src='js/biomass.js'></script>
     
     <style>
-      body { margin:0; padding:0; }
-      #map { position:absolute; top:0; bottom:0; width:100%; }
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+        
+        .droplist {
+            padding: 3px 5px 3px 5px;
+        }
+        .droplist:hover {
+            background-color: #C4C4C4;
+        }
+        .hovertip {
+            border-color: white;
+            /*background-color: white;*/
+            z-index: 100; 
+        }
+        .leaflet-container {
+            margin-bottom: 0px;
+            padding-bottom: 0px;
+            line-height: 5px;
+        }
+        .checkbox {
+            position: absolute;
+            right: 25px;
+            top: 35px;
+            z-index: 9;
+        }
+        
     </style>
 
 </head>
 
 <body>
-    <div class="dropdown" style= "
+    <div style= "
         position: absolute;
-        right: 75px;
+        right: 25px;
         top: 10px;
         z-index: 10;
     ">
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-          Zoom to a plant
-          <span class="caret"></span>
-        </button>
-        <ul id="plant-list" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"></ul>
+        <span class = "dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+              Zoom to a plant
+              <span class="caret"></span>
+            </button>
+            <ul id="plant-list" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"></ul>
+        </span>
+        <span>
+            <button class="btn btn-default" type = "button" onclick="history.go(0)"> Reset Zoom </button>
+        </span>
+    </div>
+    <div class="checkbox">
+        <h5>Show plants that are: </h5>
+        <label id="operating" onchange="toggleLayers()">
+          <input type="checkbox"> Operating
+        </label></br>
+        <label id="proposed">
+          <input type="checkbox"> Proposed
+        </label>
     </div>
     <div id='map'></div>
 
