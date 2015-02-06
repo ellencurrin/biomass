@@ -63,13 +63,14 @@ function buildMap() {
             'Nearest City: ' + layer.feature.properties.city_near + '<\/p>';
         layer.bindPopup(content);
         });
-    })
+        })
     .addTo(map);
+    })
     
     sebuffer = omnivore.geojson('biomass_data/buffer_mask_se.geojson').addTo(map);    
 
 
-    })
+
 
 }
     

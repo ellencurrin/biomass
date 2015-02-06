@@ -5,11 +5,19 @@
     <meta charset=utf-8 />
         <title>Biomass</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
+    <!--JQUERY-->
     <script src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
+    <!--BOOTSTRAP-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!--MAPBOX-->
+    <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
     <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+    <!--MY JS-->
     <script src='js/biomass.js'></script>
+    
     <style>
       body { margin:0; padding:0; }
       #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -18,6 +26,18 @@
 </head>
 
 <body>
+    <div class="dropdown" style= "
+        position: absolute;
+        right: 75px;
+        top: 10px;
+        z-index: 10;
+    ">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+          Zoom to a plant
+          <span class="caret"></span>
+        </button>
+        <ul id="plant-list" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"></ul>
+    </div>
     <div id='map'></div>
 
 </body>
