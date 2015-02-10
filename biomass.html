@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!--FONT AWESOME-->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <!--MAPBOX-->
     <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
@@ -44,8 +46,13 @@
         .checkbox {
             position: absolute;
             right: 25px;
-            top: 35px;
+            top: 45px;
             z-index: 9;
+            background-color: #fff;
+            padding: 5px 10px 10px 10px;
+        }
+        label {
+            display: block;
         }
         
     </style>
@@ -71,13 +78,8 @@
         </span>
     </div>
     <div class="checkbox">
-        <h5>Show plants that are: </h5>
-        <label id="operating" onchange="toggleLayers()">
-          <input type="checkbox"> Operating
-        </label></br>
-        <label id="proposed">
-          <input type="checkbox"> Proposed
-        </label>
+        <h5>Toggle Markers: </h5>
+        <div id="layerList"></div>
     </div>
     <div id='map'></div>
 
