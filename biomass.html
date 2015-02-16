@@ -20,15 +20,39 @@
     <!-- LEAFLET PLUGINS -->
     <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet' />  
+    <!-- DATATABLE.NET-->
+    <script src='http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js'></script>
+    <!--link href='http://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css'-->
+    <link href="css/tablestyle.css" rel="stylesheet">
+    <link href="http://cdn.datatables.net/responsive/1.0.2/css/dataTables.responsive.css">
     <!--MY JS-->
     <script src='js/biomass.js'></script>
     
     <style>
         body { margin:0; padding:0; }
-        #map { position:absolute; top:0; bottom:0; width:100%; }
+        label {
+            display: block;
+        }
+        
+        #datatable_wrapper {
+            position: absolute;
+            top: 95vh;
+            clear: both;
+            zoom: 1;
+            width: 90%;
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+        #map { position:absolute; top:0; height: 90vh; width:100%; background-color: #468966} /*5FBA8B*/
+        #plant-list {
+            max-height: 300px;
+            overflow: scroll;
+        }
+        #datatable {width: 100%; height: 250px; z-index: 50;}
         
         .droplist {
             padding: 3px 5px 3px 5px;
+            border-bottom: 1px solid #E5E5E5;
         }
         .droplist:hover {
             background-color: #C4C4C4;
@@ -50,9 +74,6 @@
             z-index: 9;
             background-color: #fff;
             padding: 5px 10px 10px 10px;
-        }
-        label {
-            display: block;
         }
         
     </style>
@@ -82,6 +103,21 @@
         <div id="layerList"></div>
     </div>
     <div id='map'></div>
+    <table id="datatable" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Company</th>
+                <th>Output</th>
+                <th>Quantity</th>
+                <th>Nearest City</th>
+                <th>Port</th>
+            </tr>
+        </thead>
+        <tbody id='tableBody'></tbody>
+
+    </table>
 
 </body>
 </html>
