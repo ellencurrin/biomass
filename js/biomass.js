@@ -22,21 +22,21 @@ var facilitiesLayer = 'biomass_data/facilities_pellet_all.geojson'
 var color = '#fff'
 var states =[]
 var counter = 0
-var t
+var table
 var newRow
 
 
 
 $( document ).ready(function() {
     buildMap();
-    t = $('#datatable').DataTable({
+    /*table = $('#datatable').DataTable({
                 //"processing": true,
                 responsive: true,
                 "scrollY": "300px",
                 "scrollCollapse": true,
                 "paging": false,
                 //"ajax": "biomass_data/facilities_pellet_all.geojson",
-            });
+            });*/
     //loadLayers();   
 }); 
 
@@ -156,7 +156,6 @@ function addLayer(layer, name) {
     //// CREATING LAYER TOGGLE
     buildToggle(layer, name)
     
-    counter = counter + 1
 }
        
 
@@ -233,9 +232,10 @@ function buildDropdown(marker, content) {
     
 }
 
+
 function buildTable(marker, content) {
     console.log("making new table row")
-    /*newRow = document.getElementById('tableBody').appendChild(document.createElement('tr'))
+    newRow = document.getElementById('tableBody').appendChild(document.createElement('tr'))
     newRow.class = 'dataTable'
     newRow.innerHTML += '<td>' + marker.feature.properties.plant_name + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.status + '</td>'
@@ -244,14 +244,24 @@ function buildTable(marker, content) {
     newRow.innerHTML += '<td>' + marker.feature.properties.gty + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.city__near + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.port + '</td>'
-    //newRow.onlick = function() {console.log("table was clicked")};
-    newRow.onhover= function() {marker.openPopup()};
-    newRow.onclick = function() {zoomInfo(marker, content)};
-    */
+    newRow.onmouseover= function() {console.log("hover"); marker.openPopup()};
+    newRow.onclick = function() {console.log("clicked"); zoomInfo(marker, content)}; 
+    counter ++
+    //console.log(counter)
+    if (counter == 53) {
+        $('#datatable').DataTable({
+                //"processing": true,
+                responsive: true,
+                "scrollY": "300px",
+                "scrollCollapse": true,
+                "paging": false,
+                //"ajax": "biomass_data/facilities_pellet_all.geojson",
+            });
+    }
     
     
     /// ADDING A ROW
-     newRow = t.row.add([
+    /*table.row.add([
             marker.feature.properties.plant_name,
             marker.feature.properties.status,
             marker.feature.properties.company__s,
@@ -261,8 +271,10 @@ function buildTable(marker, content) {
             marker.feature.properties.port,
         ])
     .draw()
-    newRow.on('mouseover', function() {marker.openPopup();})               
-    newRow.on('click', function() {zoomInfo(marker, content), console.log("table was clicked")})
+    .on('click', function() {console.log("clicked"); zoomInfo(marker, content)});*/
+    //table.row.onhover = function() {console.log(marker.feature.properties.plant_name);}
+    //table.row.on('mouseover', function() {console.log(marker.feature.properties.plant_name);})               
+    //table.row.on('click', function() {zoomInfo(marker, content), console.log("table was clicked")})
 
 }
     
