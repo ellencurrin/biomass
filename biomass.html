@@ -33,30 +33,25 @@
 </head>
 
 <body>
-    <div style= "
-        position: absolute;
-        right: 25px;
-        top: 10px;
-        z-index: 10;
-    ">
-        <span class = "dropdown">
+    <div id = "resetBt">
+        <!--span class = "dropdown">
             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
               Zoom to a plant
               <span class="caret"></span>
             </button>
             <ul id="plant-list" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"></ul>
-        </span>
+        </span-->
         <span>
             <button class="btn btn-default" type = "button" onclick="history.go(0)"> Reset Zoom </button>
         </span>
     </div>
-    <div class="checkbox">
+    <!--div class="checkbox">
         <h5>Toggle Markers: </h5>
         <div id="layerList"></div>
-    </div>
+    </div-->
     <div id='map'></div>
-    <table id="datatable" class="display" cellspacing="0" width="100%">
-        <thead>
+    <table id="datatable" class="display compact" cellspacing="0" width="100%">
+        <thead class="formatHeader">
             <tr>
                 <th>Name</th>
                 <th>Status</th>

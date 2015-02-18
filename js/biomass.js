@@ -46,16 +46,16 @@ $( document ).ready(function() {
 //****** BUILDING MAP 
 function buildMap() {
     L.mapbox.accessToken = 'pk.eyJ1IjoiZWxjdXJyIiwiYSI6IkZMekZlUEEifQ.vsXDy4z_bxRXyhSIvBXc2A';    
-    map = L.mapbox.map('map', 'elcurr.l7pk47jo', {
+    map = L.mapbox.map('map', {
             minZoom: 6,
             zoomControl: false,
         })
         .setView([33.6190, -84.7266], 6);
         
         // Disable drag and zoom handlers.
-        map.dragging.disable();
+        //map.dragging.disable();
         map.touchZoom.disable();
-        map.doubleClickZoom.disable();
+        //map.doubleClickZoom.disable();
         map.scrollWheelZoom.disable();
     
     //// ADDING SOUTHEASTERN STATES
@@ -109,7 +109,7 @@ function buildMap() {
                 })
         })
         .addTo(map);
-        buildToggle(ports, 'Ports of Export')
+        //buildToggle(ports, 'Ports of Export')
         
     ///// ADDING FACILITIES
     addLayer(omnivore.geojson('biomass_data/facilities_pellet_operating.geojson'), 'Operating');
@@ -142,7 +142,7 @@ function addLayer(layer, name) {
                 });
 
                 //// ADDING PLANT NAMES TO DROPDOWN LIST
-                buildDropdown(marker, content)
+                //buildDropdown(marker, content)
 
                 //// SETTING MARKER STYLES FOR OPERATING/PROPOSED
                 markerStyles(marker)
@@ -154,7 +154,7 @@ function addLayer(layer, name) {
         .addTo(map);
 
     //// CREATING LAYER TOGGLE
-    buildToggle(layer, name)
+    //buildToggle(layer, name)
     
 }
        
@@ -220,6 +220,7 @@ function zoomInfo (marker, content) {
         L.mapbox.tileLayer('elcurr.l4gdgnij').addTo(map);
         map.setView(marker.getLatLng(), 16);
         marker.openPopup();
+        document.getElementById("resetBt").style.display = 'block';
 
 }
 
@@ -256,25 +257,30 @@ function buildTable(marker, content) {
                 "scrollCollapse": true,
                 "paging": false,
                 //"ajax": "biomass_data/facilities_pellet_all.geojson",
-            });
+                initComplete: function () {
+                    var api = this.api();
+         
+                    api.columns().indexes().flatten().each( function ( i ) {
+                        var column = api.column( i );
+                        var select = $('<select class="sizeFilter"><option value="">filter</option></select>')
+                            .appendTo( $(column.header()) )
+                            .on( 'change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+         
+                                column
+                                    .search( val ? '^'+val+'$' : '', true, false )
+                                    .draw();
+                            } );
+         
+                        column.data().unique().sort().each( function ( d, j ) {
+                            select.append( '<option value="'+d+'">'+d+'</option>' )
+                        } );
+                    } );
+                }
+        });
     }
-    
-    
-    /// ADDING A ROW
-    /*table.row.add([
-            marker.feature.properties.plant_name,
-            marker.feature.properties.status,
-            marker.feature.properties.company__s,
-            marker.feature.properties.output,
-            marker.feature.properties.gty,
-            marker.feature.properties.city__near,
-            marker.feature.properties.port,
-        ])
-    .draw()
-    .on('click', function() {console.log("clicked"); zoomInfo(marker, content)});*/
-    //table.row.onhover = function() {console.log(marker.feature.properties.plant_name);}
-    //table.row.on('mouseover', function() {console.log(marker.feature.properties.plant_name);})               
-    //table.row.on('click', function() {zoomInfo(marker, content), console.log("table was clicked")})
 
 }
     
