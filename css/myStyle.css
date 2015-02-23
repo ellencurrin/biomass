@@ -6,9 +6,8 @@ label {display: block;}
     right: 25px;
     top: 25px;
     z-index: 10;
-    display: none;
 }
-#map { position:absolute; top:0; height: 90vh; width:100%; background-color: #468966} /*5FBA8B*/
+#map { position:absolute; top:0; height: 90vh; width:100%; background-color: #A3B1E1} /*5FBA8B*/
 #datatable_wrapper {
     position: absolute;
     top: 95vh;
@@ -23,6 +22,20 @@ label {display: block;}
     overflow: scroll;
 }
 
+.cityLabel-lg {
+    font-size: 14px;
+    color: #5D5D5B;
+    opacity: .8;
+    font-weight: bold;
+    /*text-shadow: -.5px 0 white, 0 .5px white, .5px 0 white, 0 -.5px white;*/
+}
+
+.cityLabel-sm {
+    font-size: 13px;
+    color: #5D5D5B;
+    opacity: .7;
+    /*text-shadow: -.5px 0 white, 0 .5px white, .5px 0 white, 0 -.5px white;*/
+}
 .dataTables_scrollBody {height: 500px;}
 .sizeFilter {overflow-x: scroll; max-width: 200px;}
 

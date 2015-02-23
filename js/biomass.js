@@ -1,7 +1,7 @@
-function loadLayers () { 
+function loadLayers (data) { 
     $.ajax({
             type:"GET",
-            url: data[0],
+            url: data,
             dataType:"text",
             success: parseData
     });   
@@ -21,6 +21,7 @@ var plantList = document.getElementById('plant-list');
 var facilitiesLayer = 'biomass_data/facilities_pellet_all.geojson'
 var color = '#fff'
 var states =[]
+var image
 var counter = 0
 var table
 var newRow
@@ -28,6 +29,7 @@ var newRow
 
 
 $( document ).ready(function() {
+    loadLayers('biomass_data/majorCitiesSE.geojson');
     buildMap();
     /*table = $('#datatable').DataTable({
                 //"processing": true,
@@ -37,7 +39,7 @@ $( document ).ready(function() {
                 "paging": false,
                 //"ajax": "biomass_data/facilities_pellet_all.geojson",
             });*/
-    //loadLayers();   
+    //loadLayers('biomass_data/majorCitiesSE.geojson');   
 }); 
 
 
@@ -57,16 +59,17 @@ function buildMap() {
         map.touchZoom.disable();
         //map.doubleClickZoom.disable();
         map.scrollWheelZoom.disable();
+
     
     //// ADDING SOUTHEASTERN STATES
     states = omnivore.geojson('biomass_data/SE_states.geojson')
         .on('ready', function(go) {
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
-                            color: '#FFF0A5',
+                            color: '#EAE9E3',
                             opacity: 1,
                             weight: 1, 
-                            fillColor: '#FFBC62',
+                            fillColor: '#C3C3BE',
                             fillOpacity: 1 
                             // for more options--> 'leaflet.js path options'
                     });
@@ -79,11 +82,39 @@ function buildMap() {
         .on('ready', function(go) {
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
-                                    color: '#FFF0A5', 
+                                    color: '#EAE9E3', 
                                     opacity: 1,
                                     weight: 2, 
-                                    fillColor: '#FFF0A5',  
+                                    fillColor: '#EAE9E3',  
                                     fillOpacity: 1 
+                        }); 
+                }) 
+        })
+        .addTo(map);
+    
+    //// ADDING COUNTIES 
+    counties = omnivore.geojson('biomass_data/countiesSE.geojson')
+        .on('ready', function(go) {
+                this.eachLayer(function(polygon) {
+                    polygon.setStyle ( {
+                                    color: '#EAE9E3', 
+                                    opacity: .5,
+                                    weight: .5, 
+                                    fillColor: '#FFF',  
+                                    fillOpacity: 0 
+                        }); 
+                }) 
+        })
+        .addTo(map);
+        
+    //// ADDING HYDRO
+    hydro = omnivore.geojson('biomass_data/hydroLinesUS.geojson')
+        .on('ready', function(go) {
+                this.eachLayer(function(polygon) {
+                    polygon.setStyle ( {
+                                    color: '#A3B1E1', 
+                                    opacity: 1,
+                                    weight: 1, 
                         }); 
                 }) 
         })
@@ -110,11 +141,49 @@ function buildMap() {
         })
         .addTo(map);
         //buildToggle(ports, 'Ports of Export')
+    
+    
+    ////ADDING CITIES
+    cities = omnivore.geojson('biomass_data/majorCitiesSE.geojson')
+        .on('ready', function(go) {
+                this.eachLayer(function(marker) {
+                    var className
+                    if (marker.feature.properties.capital =='Y') {className= 'cityLabel-lg'}
+                        else {className= 'cityLabel-sm'}
+                    marker.setIcon(L.divIcon({
+                        className: className,
+                        html: '<b style="font-size:13px";>&#8226</b> '+marker.feature.properties.name,
+                        iconAnchor: [2,2],
+                        iconSize: [150, 40]
+                    })).addTo(map)
+                }); 
+        })
         
+    //// SATELITE LAYER
+    image = L.mapbox.tileLayer('elcurr.l4gdgnij')
+    
     ///// ADDING FACILITIES
     addLayer(omnivore.geojson('biomass_data/facilities_pellet_operating.geojson'), 'Operating');
     addLayer(omnivore.geojson('biomass_data/facilities_pellet_proposed.geojson'), 'Proposed');
-        
+     
+     
+    map.on('zoomend', function(){
+            if (map.getZoom()>9) {
+                map.removeLayer(states);
+                map.removeLayer(base_USA);
+                map.removeLayer(cities);
+                map.removeLayer(hydro);
+                image.addTo(map);
+            } else if (map.getZoom()<=9){
+                map.removeLayer(counties)
+                map.removeLayer(image);
+                states.addTo(map);
+                base_USA.addTo(map);
+                counties.addTo(map);
+                hydro.addTo(map);
+                cities.addTo(map)
+            }
+        })   
 } 
    
     
@@ -198,14 +267,14 @@ function buildToggle(layer, name) {
 
 function markerStyles(marker) {
     if (marker.feature.properties.status === 'Operating') {
-        color= '#911815'//'#8E2800'
+        color= '#5D943F'//'#8E2800'
         marker.setIcon(L.mapbox.marker.icon({
             'marker-color': color,
             'marker-size': 'small',
             'marker-border': 1,
         }));
     } else {
-        color= '#E85118' //'#B64926';
+        color= '#E3D648' //'#B64926';
         marker.setIcon(L.mapbox.marker.icon({
             'marker-color': color,
             'marker-size': 'small'
@@ -215,12 +284,9 @@ function markerStyles(marker) {
 
 function zoomInfo (marker, content) {                         
         marker.bindPopup(content);
-        map.removeLayer(states);
-        map.removeLayer(base_USA);
-        L.mapbox.tileLayer('elcurr.l4gdgnij').addTo(map);
         map.setView(marker.getLatLng(), 16);
         marker.openPopup();
-        document.getElementById("resetBt").style.display = 'block';
+        //document.getElementById("resetBt").style.display = 'block';
 
 }
 
@@ -245,7 +311,12 @@ function buildTable(marker, content) {
     newRow.innerHTML += '<td>' + marker.feature.properties.gty + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.city__near + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.port + '</td>'
-    newRow.onmouseover= function() {console.log("hover"); marker.openPopup()};
+    newRow.onmouseover= function(){
+        console.log("hover");
+        if (map.getZoom()<=9){
+            marker.openPopup()
+        }
+    };
     newRow.onclick = function() {console.log("clicked"); zoomInfo(marker, content)}; 
     counter ++
     //console.log(counter)
@@ -281,9 +352,11 @@ function buildTable(marker, content) {
                 }
         });
     }
-
 }
-    
+
+function resetExtent(){
+    map.setView([33.6190, -84.7266], 6)
+}
 
 
 
