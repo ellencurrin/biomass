@@ -37,7 +37,7 @@ label {display: block;}
     /*text-shadow: -.5px 0 white, 0 .5px white, .5px 0 white, 0 -.5px white;*/
 }
 .dataTables_scrollBody {height: 500px;}
-.sizeFilter {overflow-x: scroll; max-width: 200px;}
+.sizeFilter {overflow-x: scroll; max-width: 175px;}
 
 .droplist {
     padding: 3px 5px 3px 5px;
@@ -64,3 +64,4 @@ label {display: block;}
     background-color: #fff;
     padding: 5px 10px 10px 10px;
 }
+

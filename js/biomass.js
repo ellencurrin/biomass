@@ -7,18 +7,16 @@ function loadLayers (data) {
     });   
 }
 function parseData(data){
-        facilities = $.parseJSON(data);
-        console.log(facilities);
+        dataObj = $.parseJSON(data);
+        console.log(dataObj);
 }
 
 
 // ****DEFINE VARIABLES
 var map = "";
-var data = ["biomass_data/facilities_pellet_all.geojson", "biomass_data/ports_of_export.geojson", "biomass_data/buffer_mask_se.geojson"]
 var facilities = [];
 var ports = [];
 var plantList = document.getElementById('plant-list');
-var facilitiesLayer = 'biomass_data/facilities_pellet_all.geojson'
 var color = '#fff'
 var states =[]
 var image
@@ -29,7 +27,7 @@ var newRow
 
 
 $( document ).ready(function() {
-    loadLayers('biomass_data/majorCitiesSE.geojson');
+    loadLayers('biomass_data/facilities.geojson');
     buildMap();
     /*table = $('#datatable').DataTable({
                 //"processing": true,
@@ -124,14 +122,14 @@ function buildMap() {
     ports = omnivore.geojson('biomass_data/ports_of_export.geojson')
         .on('ready', function(go) {
                 this.eachLayer(function(marker) {
-                    marker.bindPopup(marker.feature.properties.port, {closeButton: false});
+                    /*marker.bindPopup(marker.feature.properties.port, {closeButton: false});
                     marker.on('mouseover', function() {
                         marker.openPopup();
                     });
                     marker.on('mouseout', function() {
                         marker.closePopup();
-                    });
-                    //marker.bindLabel(marker.feature.properties.port)
+                    });*/
+                    marker.bindLabel(marker.feature.properties.port)
                     marker.setIcon(L.mapbox.marker.icon({
                             'marker-color': '#052945',
                             'marker-size': 'small',
@@ -163,8 +161,9 @@ function buildMap() {
     image = L.mapbox.tileLayer('elcurr.l4gdgnij')
     
     ///// ADDING FACILITIES
-    addLayer(omnivore.geojson('biomass_data/facilities_pellet_operating.geojson'), 'Operating');
-    addLayer(omnivore.geojson('biomass_data/facilities_pellet_proposed.geojson'), 'Proposed');
+    addLayer(omnivore.geojson('biomass_data/facilities.geojson'), 'Facilities');
+    //addLayer(omnivore.geojson('biomass_data/facilities_pellet_operating.geojson'), 'Operating');
+    //addLayer(omnivore.geojson('biomass_data/facilities_pellet_proposed.geojson'), 'Proposed');
      
      
     map.on('zoomend', function(){
@@ -188,17 +187,18 @@ function buildMap() {
    
     
 function addLayer(layer, name) {
-    layer
+    facilities = layer
         //.setZIndex(zIndex)
         .on('ready', function(go) {
             this.eachLayer(function(marker) {
                 
                 //// SETTING TOOLTIP & LABEL CONTENTS
-                var label = '<b>'+ marker.feature.properties.map_label+'</b>'
+                /*var label = '<b>'+ marker.feature.properties.map_label+'</b>'
                 marker.bindPopup(label, {closeButton: false});                   
                 marker.on('mouseover', function() {
                     marker.openPopup();
-                });
+                });*/
+                marker.bindLabel(marker.feature.properties.map_label)
                 
                 var content = '<h2>'+marker.feature.properties.plant_name+'<\/h2>'
                         + '<p>Status: ' + marker.feature.properties.status + '</br>'
@@ -253,14 +253,6 @@ function buildToggle(layer, name) {
             map.addLayer(layer);
             $(checkbox).prop('checked', true)
             
-            ///********THIS DOES NOT WORK
-            /*document.getElementById('plant-list').innerHTML('<p></p>')
-            layer.on('ready', function(go) {
-                this.eachLayer(function(marker) {
-                buildDropdown(layer, 'test')
-                })
-            })*/
-            
         }
     };
 }
@@ -304,12 +296,12 @@ function buildTable(marker, content) {
     console.log("making new table row")
     newRow = document.getElementById('tableBody').appendChild(document.createElement('tr'))
     newRow.class = 'dataTable'
-    newRow.innerHTML += '<td>' + marker.feature.properties.plant_name + '</td>'
+    newRow.innerHTML += '<td style="max-width: 200px">' + marker.feature.properties.plant_name + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.status + '</td>'
-    newRow.innerHTML += '<td>' + marker.feature.properties.company__s + '</td>'
+    newRow.innerHTML += '<td style="max-width: 250px">' + marker.feature.properties.company_subsidiary_affliate_of + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.output + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.gty + '</td>'
-    newRow.innerHTML += '<td>' + marker.feature.properties.city__near + '</td>'
+    newRow.innerHTML += '<td>' + marker.feature.properties.city_nearest + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.port + '</td>'
     newRow.onmouseover= function(){
         console.log("hover");
@@ -320,7 +312,7 @@ function buildTable(marker, content) {
     newRow.onclick = function() {console.log("clicked"); zoomInfo(marker, content)}; 
     counter ++
     //console.log(counter)
-    if (counter == 53) {
+    if (counter >= 52) {
         $('#datatable').DataTable({
                 //"processing": true,
                 responsive: true,
@@ -356,6 +348,7 @@ function buildTable(marker, content) {
 
 function resetExtent(){
     map.setView([33.6190, -84.7266], 6)
+    
 }
 
 
