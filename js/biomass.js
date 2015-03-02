@@ -64,10 +64,10 @@ function buildMap() {
         .on('ready', function(go) {
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
-                            color: '#EAE9E3',
+                            color: '#C3C3BE',
                             opacity: 1,
                             weight: 1, 
-                            fillColor: '#C3C3BE',
+                            fillColor: '#EAE9E3',
                             fillOpacity: 1 
                             // for more options--> 'leaflet.js path options'
                     });
@@ -80,10 +80,10 @@ function buildMap() {
         .on('ready', function(go) {
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
-                                    color: '#EAE9E3', 
+                                    color: '#C3C3BE', 
                                     opacity: 1,
                                     weight: 2, 
-                                    fillColor: '#EAE9E3',  
+                                    fillColor: '#D9D8D2',  
                                     fillOpacity: 1 
                         }); 
                 }) 
@@ -91,11 +91,12 @@ function buildMap() {
         .addTo(map);
     
     //// ADDING COUNTIES 
-    counties = omnivore.geojson('biomass_data/countiesSE.geojson')
+    counties = omnivore.geojson('biomass_data/counties-se.geojson')
         .on('ready', function(go) {
+                console.log('loading counties')
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
-                                    color: '#EAE9E3', 
+                                    color: '#C3C3BE', 
                                     opacity: .5,
                                     weight: .5, 
                                     fillColor: '#FFF',  
@@ -110,14 +111,30 @@ function buildMap() {
         .on('ready', function(go) {
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
-                                    color: '#A3B1E1', 
+                                    color: '#A2A9C2', 
                                     opacity: 1,
                                     weight: 1, 
                         }); 
                 }) 
         })
         .addTo(map);
-
+    
+    ////ADDING CITIES
+    cities = omnivore.geojson('biomass_data/cities_select.geojson')
+        .on('ready', function(go) {
+                this.eachLayer(function(marker) {
+                    var className
+                    if (marker.feature.properties.capital =='Y') {className= 'cityLabel-lg'}
+                        else {className= 'cityLabel-sm'}
+                    marker.setIcon(L.divIcon({
+                        className: className,
+                        html: marker.feature.properties.name,
+                        iconAnchor: [2,2],
+                        iconSize: [150, 40]
+                    }))
+                }); 
+        }).addTo(map)
+        
     //// ADDING PORTS
     ports = omnivore.geojson('biomass_data/ports_of_export.geojson')
         .on('ready', function(go) {
@@ -129,33 +146,25 @@ function buildMap() {
                     marker.on('mouseout', function() {
                         marker.closePopup();
                     });*/
-                    marker.bindLabel(marker.feature.properties.port)
-                    marker.setIcon(L.mapbox.marker.icon({
+                    marker.bindLabel(marker.feature.properties.port, {offset: [25,-15]})
+                    
+                    /*marker.setIcon(L.mapbox.marker.icon({
                             'marker-color': '#052945',
                             'marker-size': 'small',
                             'marker-symbol': 'ferry'
-                        }));
+                    }));*/
+                    marker.setIcon(L.divIcon({
+                            className: 'port',
+                            html: '<i style="color: #052945;" class="fa fa-ship fa-lg"></i>',
+                            iconAnchor: [0,0],
+                            labelAnchor: [0,0],
+                            iconSize: [150, 40]
+                        }))
                 })
         })
         .addTo(map);
         //buildToggle(ports, 'Ports of Export')
     
-    
-    ////ADDING CITIES
-    cities = omnivore.geojson('biomass_data/majorCitiesSE.geojson')
-        .on('ready', function(go) {
-                this.eachLayer(function(marker) {
-                    var className
-                    if (marker.feature.properties.capital =='Y') {className= 'cityLabel-lg'}
-                        else {className= 'cityLabel-sm'}
-                    marker.setIcon(L.divIcon({
-                        className: className,
-                        html: '<b style="font-size:13px";>&#8226</b> '+marker.feature.properties.name,
-                        iconAnchor: [2,2],
-                        iconSize: [150, 40]
-                    })).addTo(map)
-                }); 
-        })
         
     //// SATELITE LAYER
     image = L.mapbox.tileLayer('elcurr.l4gdgnij')
@@ -181,6 +190,8 @@ function buildMap() {
                 counties.addTo(map);
                 hydro.addTo(map);
                 cities.addTo(map)
+            } else if (map.getZoom()<=5) {
+                map.removeLayer(cities)
             }
         })   
 } 
@@ -316,7 +327,7 @@ function buildTable(marker, content) {
         $('#datatable').DataTable({
                 //"processing": true,
                 responsive: true,
-                "scrollY": "300px",
+                "scrollY": "75vh",
                 "scrollCollapse": true,
                 "paging": false,
                 //"ajax": "biomass_data/facilities_pellet_all.geojson",
@@ -349,6 +360,19 @@ function buildTable(marker, content) {
 function resetExtent(){
     map.setView([33.6190, -84.7266], 6)
     
+}
+
+function resize1() {
+    //document.getElementById('map').style.height= '40vh',
+    //document.getElementById('datatable_wrapper').style.top='45vh',
+    document.getElementById('resize').innerHTML= '<a href="#map"><button onclick=resize2()>View the Map</br><i class="fa fa-chevron-up fa-lg"></button></a>'
+    //document.getElementById('resize').style.top='40vh',
+    //map.removeLayer(cities),
+    //map.setView([33.6190, -84.7266], 5)
+}
+
+function resize2() {
+    document.getElementById('resize').innerHTML= '<a href="#table"><button onclick=resize1()>View the Table</br><i class="fa fa-chevron-down fa-lg"></i></button></a>'
 }
 
 

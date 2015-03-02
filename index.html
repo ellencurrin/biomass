@@ -49,23 +49,30 @@
         <h5>Toggle Markers: </h5>
         <div id="layerList"></div>
     </div-->
-    <div id='map'></div>
-    <table id="datatable" class="display compact" cellspacing="0" width="100%">
-        <thead class="formatHeader">
-            <tr>
-                <th>Name</th>
-                <th>Status</th>
-                <th>Company</th>
-                <th>Output</th>
-                <th>Quantity</th>
-                <th>Nearest City</th>
-                <th>Port</th>
-            </tr>
-        </thead>
-        <tbody id='tableBody'></tbody>
-
-    </table>
-
+    <div id='map'>
+        <a name="map"></a>
+    </div>
+    <div id="resize">
+        <a href="#table"><button onclick=resize1()>View the Table</br><i class="fa fa-chevron-down fa-lg"></i></button></a>
+    </div>
+    <div style="width:100%; top:100vh;">
+        <table id="datatable" class="display compact" cellspacing="0" width="100%">
+            <a name="table"></a>
+            <thead class="formatHeader">
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Company</th>
+                    <th>Output</th>
+                    <th>Quantity</th>
+                    <th>Nearest City</th>
+                    <th>Port</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'></tbody>
+    
+        </table>
+    </div>
 </body>
 </html>
 

@@ -1,4 +1,4 @@
-body { margin:0; padding:0; }
+body { margin:0; padding:0; font-size:12px; }
 label {display: block;}
 
 #resetBt {
@@ -7,37 +7,49 @@ label {display: block;}
     top: 25px;
     z-index: 10;
 }
-#map { position:absolute; top:0; height: 90vh; width:100%; background-color: #A3B1E1} /*5FBA8B*/
+#map { position:absolute; top:0; height: 90vh; width:100%; background-color: #A2A9C2} /*A3B1E1*/
 #datatable_wrapper {
     position: absolute;
-    top: 95vh;
+    top: 100vh;
+    height: 90vh;
     clear: both;
     zoom: 1;
     margin-left: 5%;
     margin-right: 5%;
 }
-#datatable {width: 100%; height: 250px; z-index: 50;}
+#datatable {z-index: 50;}
 #plant-list {
     max-height: 300px;
     overflow: scroll;
 }
+#resize {
+    position: absolute;
+    top: 90vh;
+    left: 45%;
+    margin: 5px;
+    background-color: transparent;
+    border: none;
+}
+#resize button {
+    background-color: transparent;
+    border: none;
+}
+#resize a:hover {text-decoration: none;}
 
 .cityLabel-lg {
     font-size: 14px;
-    color: #5D5D5B;
-    opacity: .8;
-    font-weight: bold;
-    /*text-shadow: -.5px 0 white, 0 .5px white, .5px 0 white, 0 -.5px white;*/
+    color: #052945;
+    opacity: .6;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 .cityLabel-sm {
     font-size: 13px;
-    color: #5D5D5B;
-    opacity: .7;
-    /*text-shadow: -.5px 0 white, 0 .5px white, .5px 0 white, 0 -.5px white;*/
+    color: #052945;
+    opacity: .5;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
-.dataTables_scrollBody {height: 500px;}
-.sizeFilter {overflow-x: scroll; max-width: 175px;}
+.sizeFilter {overflow-x: scroll; max-width: 150px;}
 
 .droplist {
     padding: 3px 5px 3px 5px;
