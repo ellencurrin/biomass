@@ -28,7 +28,7 @@ label {display: block;}
     zoom: 1;
     margin-left: 5%;
     margin-right: 5%;
-    margin-bottom: 5%;
+    margin-bottom: 3%;
 }
 #datatable {z-index: 50;}
 #plant-list {
@@ -39,7 +39,7 @@ label {display: block;}
     position: absolute;
     top: 90vh;
     left: 45%;
-    margin: 5px;
+    margin: 7px;
     background-color: transparent;
     border: none;
 }
@@ -90,7 +90,7 @@ label {display: block;}
 .checkbox {
     position: absolute;
     right: 25px;
-    top: 50vh;
+    top: 60vh;
     z-index: 9;
     background-color: #fff;
     padding: 5px 10px 10px 10px;
