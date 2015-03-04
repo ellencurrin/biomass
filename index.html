@@ -33,22 +33,23 @@
 </head>
 
 <body>
+    <div id="cover">
+        <h4>Please be patient while this page loads.</h4>
+        <p style="font-size: 14px">(it may take up to a minute)</p>
+        <i class="fa fa-spinner fa-pulse fa-3x"></i>
+    </div>
+    
     <div id = "resetBt">
-        <!--span class = "dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-              Zoom to a plant
-              <span class="caret"></span>
-            </button>
-            <ul id="plant-list" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"></ul>
-        </span-->
         <span>
             <button class="btn btn-default" type = "button" onclick=resetExtent()> Reset Extent </button>
         </span>
     </div>
-    <!--div class="checkbox">
-        <h5>Toggle Markers: </h5>
+    
+    <div class="checkbox">
+        <h5>Display: </h5>
         <div id="layerList"></div>
-    </div-->
+    </div>
+        
     <div id='map'>
         <a name="map"></a>
     </div>

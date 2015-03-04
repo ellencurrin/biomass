@@ -1,6 +1,18 @@
 body { margin:0; padding:0; font-size:12px; }
 label {display: block;}
 
+#cover {
+    /*background: url("to/your/ajaxloader.gif") no-repeat scroll center center #FFF;*/
+    background-color: #fff;
+    opacity: .7;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+    text-align: center;
+    padding-top: 40vh;
+}
+
 #resetBt {
     position: absolute;
     right: 25px;
@@ -10,12 +22,13 @@ label {display: block;}
 #map { position:absolute; top:0; height: 90vh; width:100%; background-color: #A2A9C2} /*A3B1E1*/
 #datatable_wrapper {
     position: absolute;
-    top: 100vh;
+    top: 95vh;
     height: 90vh;
     clear: both;
     zoom: 1;
     margin-left: 5%;
     margin-right: 5%;
+    margin-bottom: 5%;
 }
 #datatable {z-index: 50;}
 #plant-list {
@@ -35,6 +48,12 @@ label {display: block;}
     border: none;
 }
 #resize a:hover {text-decoration: none;}
+
+#LblTxt {}
+
+.port {color: #052945;}
+.operating {color: #5D943F}
+.proposed {color: #E3D648}
 
 .cityLabel-lg {
     font-size: 14px;
@@ -71,7 +90,7 @@ label {display: block;}
 .checkbox {
     position: absolute;
     right: 25px;
-    top: 15px;
+    top: 50vh;
     z-index: 9;
     background-color: #fff;
     padding: 5px 10px 10px 10px;
