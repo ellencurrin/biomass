@@ -7,18 +7,16 @@ function loadLayers (data) {
     });   
 }
 function parseData(data){
-        facilities = $.parseJSON(data);
-        console.log(facilities);
+        dataObj = $.parseJSON(data);
+        console.log(dataObj);
 }
 
 
 // ****DEFINE VARIABLES
 var map = "";
-var data = ["biomass_data/facilities_pellet_all.geojson", "biomass_data/ports_of_export.geojson", "biomass_data/buffer_mask_se.geojson"]
 var facilities = [];
 var ports = [];
-var plantList = document.getElementById('plant-list');
-var facilitiesLayer = 'biomass_data/facilities_pellet_all.geojson'
+var cities = [];
 var color = '#fff'
 var states =[]
 var image
@@ -29,7 +27,8 @@ var newRow
 
 
 $( document ).ready(function() {
-    loadLayers('biomass_data/majorCitiesSE.geojson');
+    console.log("document ready")
+    loadLayers('biomass_data/counties-se.geojson');
     buildMap();
     /*table = $('#datatable').DataTable({
                 //"processing": true,
@@ -40,7 +39,12 @@ $( document ).ready(function() {
                 //"ajax": "biomass_data/facilities_pellet_all.geojson",
             });*/
     //loadLayers('biomass_data/majorCitiesSE.geojson');   
-}); 
+});
+
+/*$(window).load(function(){
+    console.log("window loaded")
+    $('#cover').fadeOut(1);
+})*/
 
 
 
@@ -61,50 +65,57 @@ function buildMap() {
         map.scrollWheelZoom.disable();
 
     
-    //// ADDING SOUTHEASTERN STATES
-    states = omnivore.geojson('biomass_data/SE_states.geojson')
-        .on('ready', function(go) {
-                this.eachLayer(function(polygon) {
-                    polygon.setStyle ( {
-                            color: '#EAE9E3',
-                            opacity: 1,
-                            weight: 1, 
-                            fillColor: '#C3C3BE',
-                            fillOpacity: 1 
-                            // for more options--> 'leaflet.js path options'
-                    });
-                })
-        })
-    .addTo(map);
-    
     //// ADDING USA 
     base_USA = omnivore.geojson('biomass_data/other_states.geojson')
         .on('ready', function(go) {
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
-                                    color: '#EAE9E3', 
+                                    color: '#C3C3BE', 
                                     opacity: 1,
                                     weight: 2, 
-                                    fillColor: '#EAE9E3',  
+                                    fillColor: '#D9D8D2',  
                                     fillOpacity: 1 
                         }); 
                 }) 
         })
+        .setZIndex(1)
         .addTo(map);
-    
-    //// ADDING COUNTIES 
-    counties = omnivore.geojson('biomass_data/countiesSE.geojson')
+        
+        
+    //// ADDING SOUTHEASTERN STATES
+    states = omnivore.geojson('biomass_data/SE_states.geojson')
         .on('ready', function(go) {
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
-                                    color: '#EAE9E3', 
+                            color: '#C3C3BE',
+                            opacity: 1,
+                            weight: 1, 
+                            fillColor: '#EAE9E3',
+                            fillOpacity: 1 
+                            // for more options--> 'leaflet.js path options'
+                    });
+                })
+        })
+    .setZIndex(0)
+    .addTo(map);
+    
+    
+    //// ADDING COUNTIES 
+    counties = omnivore.geojson('biomass_data/counties-se.geojson')
+        .on('ready', function(go) {
+                console.log('loading counties')
+                this.eachLayer(function(polygon) {
+                    polygon.setStyle ( {
+                                    color: '#C3C3BE', 
                                     opacity: .5,
                                     weight: .5, 
                                     fillColor: '#FFF',  
                                     fillOpacity: 0 
                         }); 
-                }) 
+                })
+            $('#cover').fadeOut(1);
         })
+        .setZIndex(10)
         .addTo(map);
         
     //// ADDING HYDRO
@@ -112,39 +123,17 @@ function buildMap() {
         .on('ready', function(go) {
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
-                                    color: '#A3B1E1', 
+                                    color: '#A2A9C2', 
                                     opacity: 1,
                                     weight: 1, 
                         }); 
                 }) 
         })
+        .setZIndex(6)
         .addTo(map);
-
-    //// ADDING PORTS
-    ports = omnivore.geojson('biomass_data/ports_of_export.geojson')
-        .on('ready', function(go) {
-                this.eachLayer(function(marker) {
-                    marker.bindPopup(marker.feature.properties.port, {closeButton: false});
-                    marker.on('mouseover', function() {
-                        marker.openPopup();
-                    });
-                    marker.on('mouseout', function() {
-                        marker.closePopup();
-                    });
-                    //marker.bindLabel(marker.feature.properties.port)
-                    marker.setIcon(L.mapbox.marker.icon({
-                            'marker-color': '#052945',
-                            'marker-size': 'small',
-                            'marker-symbol': 'ferry'
-                        }));
-                })
-        })
-        .addTo(map);
-        //buildToggle(ports, 'Ports of Export')
-    
     
     ////ADDING CITIES
-    cities = omnivore.geojson('biomass_data/majorCitiesSE.geojson')
+    cities = omnivore.geojson('biomass_data/cities_select.geojson')
         .on('ready', function(go) {
                 this.eachLayer(function(marker) {
                     var className
@@ -152,20 +141,119 @@ function buildMap() {
                         else {className= 'cityLabel-sm'}
                     marker.setIcon(L.divIcon({
                         className: className,
-                        html: '<b style="font-size:13px";>&#8226</b> '+marker.feature.properties.name,
+                        html: marker.feature.properties.name,
                         iconAnchor: [2,2],
                         iconSize: [150, 40]
-                    })).addTo(map)
+                    }))
                 }); 
         })
+        .setZIndex(7)
+        .addTo(map)
+        
+    buildToggle(cities, '  City Labels', 'cityLabel-sm fa fa-font fa-lg')
+        
+    //// ADDING PORTS
+    ports = omnivore.geojson('biomass_data/ports_of_export.geojson')
+        .on('ready', function(go) {
+                this.eachLayer(function(marker) {
+                    /*marker.bindPopup(marker.feature.properties.port, {closeButton: false});
+                    marker.on('mouseover', function() {
+                        marker.openPopup();
+                    });
+                    marker.on('mouseout', function() {
+                        marker.closePopup();
+                    });*/
+                    marker.bindLabel(marker.feature.properties.port, {offset: [25,-15]})
+                    
+                    /*marker.setIcon(L.mapbox.marker.icon({
+                            'marker-color': '#052945',
+                            'marker-size': 'small',
+                            'marker-symbol': 'ferry'
+                    }));*/
+                    marker.setIcon(L.divIcon({
+                            className: 'port',
+                            html: '<i class="port fa fa-ship fa-lg"></i>',
+                            iconAnchor: [0,0],
+                            labelAnchor: [0,0],
+                            iconSize: [150, 40]
+                        }))
+                })
+        })
+        .setZIndex(8)
+        .addTo(map);
+        
+        buildToggle(ports, '  Ports of Export', 'port fa fa-ship')
+    
         
     //// SATELITE LAYER
     image = L.mapbox.tileLayer('elcurr.l4gdgnij')
-    
-    ///// ADDING FACILITIES
-    addLayer(omnivore.geojson('biomass_data/facilities_pellet_operating.geojson'), 'Operating');
-    addLayer(omnivore.geojson('biomass_data/facilities_pellet_proposed.geojson'), 'Proposed');
      
+     
+    operating = omnivore.geojson('biomass_data/facilities_operating.geojson')
+        .on('ready', function(go) {
+                this.eachLayer(function(marker) {
+                    marker.bindLabel(marker.feature.properties.map_label)
+                    
+                    var content = '<h2>'+marker.feature.properties.plant_name+'<\/h2>'
+                            + '<p>Status: ' + marker.feature.properties.status + '</br>'
+                            +'Nearest City: ' + marker.feature.properties.city_near + '</p>'
+                            + '<p>Notes: ' + marker.feature.properties.notes + '</br>'
+                            + 'Website: <a href = " '+ marker.feature.properties.website + ' " target="_blank">' + marker.feature.properties.website + '</a></p>' ;
+                        
+                    marker.on('click', function() {
+                        zoomInfo(marker, content);
+                    });
+    
+                    marker.setIcon(L.mapbox.marker.icon({
+                        'marker-color': '#5D943F',
+                        'marker-size': 'small',
+                        'marker-border': 1,
+                    }));
+                    
+                    /// BUILDING HTML TABLE
+                    buildTable(marker, content, 0);
+                })
+            })
+        
+            .setZIndex(11)
+            .addTo(map);
+    
+        //// CREATING LAYER TOGGLE
+        buildToggle(operating, '  Operating Plants', 'fa fa-circle operating')
+    
+    
+    proposed = omnivore.geojson('biomass_data/facilities_proposed.geojson')
+        .on('ready', function(go) {
+                this.eachLayer(function(marker) {
+                    marker.bindLabel(marker.feature.properties.map_label)
+                    
+                    var content = '<h2>'+marker.feature.properties.plant_name+'<\/h2>'
+                            + '<p>Status: ' + marker.feature.properties.status + '</br>'
+                            +'Nearest City: ' + marker.feature.properties.city_near + '</p>'
+                            + '<p>Notes: ' + marker.feature.properties.notes + '</br>'
+                            + 'Website: <a href = " '+ marker.feature.properties.website + ' " target="_blank">' + marker.feature.properties.website + '</a></p>' ;
+                        
+                    marker.on('click', function() {
+                        zoomInfo(marker, content);
+                    });
+    
+                    marker.setIcon(L.mapbox.marker.icon({
+                        'marker-color': '#E3D648',
+                        'marker-size': 'small',
+                        'marker-border': 1,
+                    }));
+                    
+                    
+                    /// BUILDING HTML TABLE
+                    buildTable(marker, content, 1);
+                })
+            })
+            .setZIndex(11)
+            .addTo(map);
+        
+        //// CREATING LAYER TOGGLE
+        buildToggle(proposed, '  Proposed Plants', 'fa fa-circle proposed')
+
      
     map.on('zoomend', function(){
             if (map.getZoom()>9) {
@@ -182,62 +270,27 @@ function buildMap() {
                 counties.addTo(map);
                 hydro.addTo(map);
                 cities.addTo(map)
+            } else if (map.getZoom()<=5) {
+                map.removeLayer(cities)
             }
         })   
 } 
    
-    
-function addLayer(layer, name) {
-    layer
-        //.setZIndex(zIndex)
-        .on('ready', function(go) {
-            this.eachLayer(function(marker) {
-                
-                //// SETTING TOOLTIP & LABEL CONTENTS
-                var label = '<b>'+ marker.feature.properties.map_label+'</b>'
-                marker.bindPopup(label, {closeButton: false});                   
-                marker.on('mouseover', function() {
-                    marker.openPopup();
-                });
-                
-                var content = '<h2>'+marker.feature.properties.plant_name+'<\/h2>'
-                        + '<p>Status: ' + marker.feature.properties.status + '</br>'
-                        +'Nearest City: ' + marker.feature.properties.city_near + '</p>'
-                        + '<p>Notes: ' + marker.feature.properties.notes + '</br>'
-                        + 'Website: <a href = " '+ marker.feature.properties.website + ' " target="_blank">' + marker.feature.properties.website + '</a></p>' ;
-                    
-                marker.on('click', function() {
-                    zoomInfo(marker, content);
-                });
 
-                //// ADDING PLANT NAMES TO DROPDOWN LIST
-                //buildDropdown(marker, content)
-
-                //// SETTING MARKER STYLES FOR OPERATING/PROPOSED
-                markerStyles(marker)
-                
-                /// BUILDING HTML TABLE
-                buildTable(marker, content);
-            })
-        })
-        .addTo(map);
-
-    //// CREATING LAYER TOGGLE
-    //buildToggle(layer, name)
-    
-}
-       
-
-
-function buildToggle(layer, name) {
+function buildToggle(layer, name, icon) {
     var layers = document.getElementById('layerList');
     var checkbox = document.createElement('input');
         checkbox.type = 'checkbox'
         checkbox.checked = 'True';
     var label = document.createElement('label');
+    var legend = document.createElement('i');
+    legend.setAttribute('class', icon);
     var description = document.createTextNode(name);
+    description.className = "cityLabel-sm"
+    //document.getElementById("LblTxt").innerHTML = name;
     
     label.appendChild(checkbox);
+    label.appendChild(legend);
     label.appendChild(description);
     layers.appendChild(label);
         
@@ -253,33 +306,8 @@ function buildToggle(layer, name) {
             map.addLayer(layer);
             $(checkbox).prop('checked', true)
             
-            ///********THIS DOES NOT WORK
-            /*document.getElementById('plant-list').innerHTML('<p></p>')
-            layer.on('ready', function(go) {
-                this.eachLayer(function(marker) {
-                buildDropdown(layer, 'test')
-                })
-            })*/
-            
         }
     };
-}
-
-function markerStyles(marker) {
-    if (marker.feature.properties.status === 'Operating') {
-        color= '#5D943F'//'#8E2800'
-        marker.setIcon(L.mapbox.marker.icon({
-            'marker-color': color,
-            'marker-size': 'small',
-            'marker-border': 1,
-        }));
-    } else {
-        color= '#E3D648' //'#B64926';
-        marker.setIcon(L.mapbox.marker.icon({
-            'marker-color': color,
-            'marker-size': 'small'
-        }));
-    }
 }
 
 function zoomInfo (marker, content) {                         
@@ -290,26 +318,17 @@ function zoomInfo (marker, content) {
 
 }
 
-function buildDropdown(marker, content) {
-    //document.getElementById('plant-list').innerHTML = ""
-    plantList = document.getElementById('plant-list').appendChild(document.createElement('li'));
-    plantList.className = 'droplist';
-    plantList.innerHTML = marker.feature.properties.plant_name;                
-    plantList.onclick = function() {zoomInfo(marker, content)};
-    
-}
 
-
-function buildTable(marker, content) {
+function buildTable(marker, content, num) {
     console.log("making new table row")
     newRow = document.getElementById('tableBody').appendChild(document.createElement('tr'))
     newRow.class = 'dataTable'
-    newRow.innerHTML += '<td>' + marker.feature.properties.plant_name + '</td>'
+    newRow.innerHTML += '<td style="max-width: 200px">' + marker.feature.properties.plant_name + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.status + '</td>'
-    newRow.innerHTML += '<td>' + marker.feature.properties.company__s + '</td>'
+    newRow.innerHTML += '<td style="max-width: 250px">' + marker.feature.properties.company_subsidiary_affliate_of + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.output + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.gty + '</td>'
-    newRow.innerHTML += '<td>' + marker.feature.properties.city__near + '</td>'
+    newRow.innerHTML += '<td>' + marker.feature.properties.city_nearest + '</td>'
     newRow.innerHTML += '<td>' + marker.feature.properties.port + '</td>'
     newRow.onmouseover= function(){
         console.log("hover");
@@ -320,11 +339,11 @@ function buildTable(marker, content) {
     newRow.onclick = function() {console.log("clicked"); zoomInfo(marker, content)}; 
     counter ++
     //console.log(counter)
-    if (counter == 53) {
+    if (counter >= 52) {
         $('#datatable').DataTable({
                 //"processing": true,
                 responsive: true,
-                "scrollY": "300px",
+                "scrollY": "75vh",
                 "scrollCollapse": true,
                 "paging": false,
                 //"ajax": "biomass_data/facilities_pellet_all.geojson",
@@ -356,6 +375,20 @@ function buildTable(marker, content) {
 
 function resetExtent(){
     map.setView([33.6190, -84.7266], 6)
+    
+}
+
+function resize1() {
+    //document.getElementById('map').style.height= '40vh',
+    //document.getElementById('datatable_wrapper').style.top='45vh',
+    document.getElementById('resize').innerHTML= '<a href="#map"><button onclick=resize2()>View the Map</br><i class="fa fa-chevron-up fa-lg"></button></a>'
+    //document.getElementById('resize').style.top='40vh',
+    //map.removeLayer(cities),
+    //map.setView([33.6190, -84.7266], 5)
+}
+
+function resize2() {
+    document.getElementById('resize').innerHTML= '<a href="#table"><button onclick=resize1()>View the Table</br><i class="fa fa-chevron-down fa-lg"></i></button></a>'
 }
 
 
