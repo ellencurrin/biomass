@@ -38,21 +38,27 @@
         <p style="font-size: 14px">(it may take up to a minute)</p>
         <i class="fa fa-spinner fa-pulse fa-3x"></i>
     </div>
-    
+    <div id="title-info">
+        <h2>Wood Pellet Plants and European Export</h2>
+    </div>
+    <div id="controls"><a><button onclick=closeControls()>X</button> close controls</a></div>   
     <div id = "resetBt">
         <span>
             <button class="btn btn-default" type = "button" onclick=resetExtent()> Reset Extent </button>
         </span>
     </div>
-    
-    <div class="checkbox">
+    <div id="checkbox">
         <h5>Display: </h5>
         <div id="layerList"></div>
-    </div>
-        
+    </div> 
     <div id='map'>
         <a name="map"></a>
     </div>
+    
+    <div id="viewControls">
+        <a>open controls &nbsp<button onclick=viewControls()><i class="fa fa-bars"></i></button></a>
+    </div>
+    
     <div id="resize">
         <a href="#table"><button onclick=resize1()>View the Table</br><i class="fa fa-chevron-down fa-lg"></i></button></a>
     </div>

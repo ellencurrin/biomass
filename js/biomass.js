@@ -56,7 +56,7 @@ function buildMap() {
             minZoom: 6,
             zoomControl: false,
         })
-        .setView([33.6190, -84.7266], 6);
+        .setView([34.2190, -83.5266], 6);
         
         // Disable drag and zoom handlers.
         //map.dragging.disable();
@@ -64,9 +64,10 @@ function buildMap() {
         //map.doubleClickZoom.disable();
         map.scrollWheelZoom.disable();
 
+    new L.Control.Zoom({ position: 'topright' }).addTo(map);
     
     //// ADDING USA 
-    base_USA = omnivore.geojson('biomass_data/other_states.geojson')
+    base_USA = omnivore.geojson('biomass_data/other_states-simple.json')
         .on('ready', function(go) {
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
@@ -83,7 +84,7 @@ function buildMap() {
         
         
     //// ADDING SOUTHEASTERN STATES
-    states = omnivore.geojson('biomass_data/SE_states.geojson')
+    states = omnivore.geojson('biomass_data/SE_states-simple.json')
         .on('ready', function(go) {
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
@@ -101,7 +102,7 @@ function buildMap() {
     
     
     //// ADDING COUNTIES 
-    counties = omnivore.geojson('biomass_data/counties-se.geojson')
+    counties = omnivore.geojson('biomass_data/counties-se-simple.json')
         .on('ready', function(go) {
                 console.log('loading counties')
                 this.eachLayer(function(polygon) {
@@ -374,7 +375,7 @@ function buildTable(marker, content, num) {
 }
 
 function resetExtent(){
-    map.setView([33.6190, -84.7266], 6)
+    map.setView([34.2190, -84.5266], 6)
     
 }
 
@@ -389,6 +390,20 @@ function resize1() {
 
 function resize2() {
     document.getElementById('resize').innerHTML= '<a href="#table"><button onclick=resize1()>View the Table</br><i class="fa fa-chevron-down fa-lg"></i></button></a>'
+}
+
+function closeControls() {
+    document.getElementById("controls").style.display="none";
+    document.getElementById("resetBt").style.display="none";
+    document.getElementById("checkbox").style.display="none";
+    document.getElementById("viewControls").style.display="block";
+}
+
+function viewControls() {
+    document.getElementById("controls").style.display="block";
+    document.getElementById("resetBt").style.display="block";
+    document.getElementById("checkbox").style.display="block";
+    document.getElementById("viewControls").style.display="none";
 }
 
 
