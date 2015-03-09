@@ -30,6 +30,7 @@ $( document ).ready(function() {
     console.log("document ready")
     loadLayers('biomass_data/counties-se.geojson');
     buildMap();
+    $('#layers-list').dropdown('toggle');
     /*table = $('#datatable').DataTable({
                 //"processing": true,
                 responsive: true,
@@ -151,7 +152,7 @@ function buildMap() {
         .setZIndex(7)
         .addTo(map)
         
-    buildToggle(cities, '  City Labels', 'cityLabel-sm fa fa-font fa-lg')
+    buildToggle(cities, '  City Labels', 'cityLabel-sm fa fa-font fa-lg sp')
         
     //// ADDING PORTS
     ports = omnivore.geojson('biomass_data/ports_of_export.geojson')
@@ -183,7 +184,7 @@ function buildMap() {
         .setZIndex(8)
         .addTo(map);
         
-        buildToggle(ports, '  Ports of Export', 'port fa fa-ship')
+        buildToggle(ports, '  Ports of Export', 'port fa fa-ship sp')
     
         
     //// SATELITE LAYER
@@ -220,7 +221,7 @@ function buildMap() {
             .addTo(map);
     
         //// CREATING LAYER TOGGLE
-        buildToggle(operating, '  Operating Plants', 'fa fa-circle operating')
+        buildToggle(operating, '  Operating Plants', 'fa fa-circle operating sp')
     
     
     proposed = omnivore.geojson('biomass_data/facilities_proposed.geojson')
@@ -253,7 +254,7 @@ function buildMap() {
             .addTo(map);
         
         //// CREATING LAYER TOGGLE
-        buildToggle(proposed, '  Proposed Plants', 'fa fa-circle proposed')
+        buildToggle(proposed, '  Proposed Plants', 'fa fa-circle proposed sp')
 
      
     map.on('zoomend', function(){

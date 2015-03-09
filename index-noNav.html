@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset=utf-8 />
+        <title>Biomass</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <!--JQUERY-->
+    <script src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
+    <!--BOOTSTRAP-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!--FONT AWESOME-->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <!--MAPBOX-->
+    <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
+    <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+    <!-- LEAFLET PLUGINS -->
+    <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet' />  
+    <!-- DATATABLE.NET-->
+    <script src='http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js'></script>
+    <!--link href='http://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css'-->
+    <link href="css/tablestyle.css" rel="stylesheet">
+    <link href="http://cdn.datatables.net/responsive/1.0.2/css/dataTables.responsive.css">
+    <!--MY JS-->
+    <script src='js/biomass.js'></script>
+    <!-- MY CSS-->
+    <link href="css/myStyle-noNav.css" rel="stylesheet">
+    
+</head>
+
+<body>
+    <div id="cover">
+        <h4>Please be patient while this page loads.</h4>
+        <p style="font-size: 14px">(it may take up to a minute)</p>
+        <i class="fa fa-spinner fa-pulse fa-3x"></i>
+    </div>
+    
+    
+    <div id="title-info">
+        <h2>Wood Pellet Plants and European Export</h2>
+    </div>
+    <p class="dataInfo">Map Powered By: Mapbox.js and Leaflet.js</br>
+        Data Sources: SELC; Pellet Industry Releases and Website; US Census Bureau</br>
+        Find out more at <a href="http://www.southernenvironment.org/cases-and-projects/biomass-energy-in-the-south">http://www.southernenvironment.org/cases-and-projects/biomass-energy-in-the-south</a></p>
+    <div id="controls"><a><button onclick=closeControls()>X</button> <!--close controls--></a></div>   
+    <div id = "resetBt">
+        <span>
+            <button class="btn btn-default" type = "button" onclick=resetExtent()> Reset Extent </button>
+        </span>
+    </div>
+    <div id="checkbox">
+        <h5>Display: </h5>
+        <div id="layerList"></div>
+    </div>
+    <img src="css/selc-logo.png" style="position: absolute; top: 80vh; right: 10px; z-index: 25; height: 8%;">
+    <div id='map'>
+        <a name="map"></a>
+    </div>
+    
+    <div id="viewControls">
+        <a><!--open controls &nbsp--><button onclick=viewControls()><i class="fa fa-bars"></i></button></a>
+    </div>
+    
+    <div id="resize">
+        <a href="#table"><button onclick=resize1()>View the Table</br><i class="fa fa-chevron-down fa-lg"></i></button></a>
+    </div>
+    <div style="width:100%; top:100vh;">
+        <table id="datatable" class="display compact" cellspacing="0" width="100%">
+            <a name="table"></a>
+            <thead class="formatHeader">
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Company</th>
+                    <th>Output</th>
+                    <th>Quantity</th>
+                    <th>Nearest City</th>
+                    <th>Port</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'></tbody>
+    
+        </table>
+    </div>
+</body>
+</html>
+
+
