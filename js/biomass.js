@@ -191,7 +191,7 @@ function buildMap() {
     image = L.mapbox.tileLayer('elcurr.l4gdgnij')
      
      
-    operating = omnivore.geojson('biomass_data/facilities_operating.geojson')
+    operating = omnivore.geojson('biomass_data/facilities_pellet_exporting_operating.geojson')
         .on('ready', function(go) {
                 this.eachLayer(function(marker) {
                     marker.bindLabel(marker.feature.properties.map_label)
@@ -224,7 +224,7 @@ function buildMap() {
         buildToggle(operating, '  Operating Plants', 'fa fa-circle operating sp')
     
     
-    proposed = omnivore.geojson('biomass_data/facilities_proposed.geojson')
+    proposed = omnivore.geojson('biomass_data/facilities_pellet_exporting_proposed.geojson')
         .on('ready', function(go) {
                 this.eachLayer(function(marker) {
                     marker.bindLabel(marker.feature.properties.map_label)
@@ -341,7 +341,7 @@ function buildTable(marker, content, num) {
     newRow.onclick = function() {console.log("clicked"); zoomInfo(marker, content)}; 
     counter ++
     //console.log(counter)
-    if (counter >= 52) {
+    if (counter >= 42) {
         $('#datatable').DataTable({
                 //"processing": true,
                 responsive: true,

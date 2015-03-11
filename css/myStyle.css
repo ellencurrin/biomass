@@ -103,7 +103,6 @@ h2 {font-size: 5vh;}
 }
 
 #datatable_wrapper {
-
     height: 87vh;
     clear: both;
     zoom: 1;
@@ -129,6 +128,12 @@ h2 {font-size: 5vh;}
 #resize a:hover {text-decoration: none;}
 
 #LblTxt {}
+
+
+.resetMap {
+    padding: 3px;
+    border-radius: 4px;
+}
 
 .port {color: #052945; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;}
 .operating {color: #5D943F}
