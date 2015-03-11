@@ -25,6 +25,7 @@
     <!--link href='http://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css'-->
     <link href="css/tablestyle.css" rel="stylesheet">
     <link href="http://cdn.datatables.net/responsive/1.0.2/css/dataTables.responsive.css">
+    <script src='http://cdn.datatables.net/responsive/1.0.4/js/dataTables.responsive.js'></script>
     <!--MY JS-->
     <script src='js/biomass.js'></script>
     <!-- MY CSS-->
@@ -51,7 +52,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#" style="color: #052945; opacity: .8; font-weight: bold; font-size:24px;">Wood Pellet Plants</a>
+          <a class="navbar-brand" href="#" style="max-width: 80vw; color: #052945; opacity: .8; font-weight: bold; font-size:20px;">Proposed and Existing Wood Pellet Plants in the Southeast US</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -68,7 +69,7 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="./" onclick=resetExtent()>Reset Extent</a></li>
+            <li><a href="./" onclick=resetExtent()><button>Reset Map</button></a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">Layers<span class="caret"></span></a>
               <div class="dropdown-menu" id="layers-list" role="menu" style="font-size: 12px; background-color: #fff; opacity: .8;">
@@ -96,13 +97,13 @@
             <a name="table"></a>
             <thead class="formatHeader">
                 <tr>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th>Company</th>
-                    <th>Output</th>
-                    <th>Quantity</th>
-                    <th>Nearest City</th>
-                    <th>Port</th>
+                    <th>Name</br></th>
+                    <th>Status</br></th>
+                    <th>Company</br></th>
+                    <th>Output</br></th>
+                    <th>Quantity</br></th>
+                    <th>Nearest City</br></th>
+                    <th>Port</br></th>
                 </tr>
             </thead>
             <tbody id='tableBody'></tbody>
