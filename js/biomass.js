@@ -28,7 +28,7 @@ var newRow
 
 $( document ).ready(function() {
     console.log("document ready")
-    loadLayers('biomass_data/counties-se.geojson');
+    loadLayers('biomass_data/facilities_pellet_exporting_operating.geojson');
     buildMap();
     $('#layers-list').dropdown('toggle');
     /*table = $('#datatable').DataTable({
@@ -195,12 +195,20 @@ function buildMap() {
         .on('ready', function(go) {
                 this.eachLayer(function(marker) {
                     marker.bindLabel(marker.feature.properties.map_label)
+                    var portInfo
+                    if (marker.feature.properties.port == 'null') {
+                                portInfo = 'Does not export'
+                            } else {
+                                portInfo = 'Exports from '+ marker.feature.properties.port + '</p>' ;
+                            }
                     
                     var content = '<h2>'+marker.feature.properties.plant_name+'<\/h2>'
-                            + '<p>Status: ' + marker.feature.properties.status + '</br>'
-                            +'Nearest City: ' + marker.feature.properties.city_near + '</p>'
-                            + '<p>Notes: ' + marker.feature.properties.notes + '</br>'
-                            + 'Website: <a href = " '+ marker.feature.properties.website + ' " target="_blank">' + marker.feature.properties.website + '</a></p>' ;
+                            + '<p>' + marker.feature.properties.city_nearest + ', '+ marker.feature.properties.st + '</br>'
+                            + marker.feature.properties.status + ' (' + marker.feature.properties.year_online + ')' + '</br>'
+                            + marker.feature.properties.output +' dry tons/year'+ '</br>'
+                            + portInfo+ '</p>' ;
+                            
+
                         
                     marker.on('click', function() {
                         zoomInfo(marker, content);
@@ -229,12 +237,20 @@ function buildMap() {
                 this.eachLayer(function(marker) {
                     marker.bindLabel(marker.feature.properties.map_label)
                     
+                    var portInfo
+                    if (marker.feature.properties.port == 'null') {
+                                portInfo = 'Does not export'
+                            } else {
+                                portInfo = 'Exports from '+ marker.feature.properties.port + '</p>' ;
+                            }
+                    
                     var content = '<h2>'+marker.feature.properties.plant_name+'<\/h2>'
-                            + '<p>Status: ' + marker.feature.properties.status + '</br>'
-                            +'Nearest City: ' + marker.feature.properties.city_near + '</p>'
-                            + '<p>Notes: ' + marker.feature.properties.notes + '</br>'
-                            + 'Website: <a href = " '+ marker.feature.properties.website + ' " target="_blank">' + marker.feature.properties.website + '</a></p>' ;
-                        
+                            + '<p>' + marker.feature.properties.city_nearest + ', '+ marker.feature.properties.st + '</br>'
+                            + marker.feature.properties.status + ' (' + marker.feature.properties.year_online + ')' + '</br>'
+                            + marker.feature.properties.output +' dry tons/year'+ '</br>'
+                            + portInfo+ '</p>' ;
+                            
+                            
                     marker.on('click', function() {
                         zoomInfo(marker, content);
                     });
@@ -341,7 +357,7 @@ function buildTable(marker, content, num) {
     newRow.onclick = function() {console.log("clicked"); zoomInfo(marker, content)}; 
     counter ++
     //console.log(counter)
-    if (counter >= 42) {
+    if (counter >= 43) {
         $('#datatable').DataTable({
                 //"processing": true,
                 responsive: true,
