@@ -160,7 +160,7 @@ function buildMap() {
         .setZIndex(7)
         //.addTo(map)
         
-    buildToggle(cities, '  City Labels', 'cityLabel-sm fa fa-font fa-lg sp')
+    //buildToggle(cities, '  City Labels', 'cityLabel-sm fa fa-font fa-lg sp')
         
     //// ADDING PORTS
     ports = omnivore.geojson('biomass_data/ports_of_export.geojson')
