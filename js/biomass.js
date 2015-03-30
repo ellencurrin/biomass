@@ -67,6 +67,14 @@ function buildMap() {
 
     new L.Control.Zoom({ position: 'topright' }).addTo(map);
     
+    ///BASE MAP
+    var base = L.tileLayer('http://a{s}.acetate.geoiq.com/tiles/acetate-hillshading/{z}/{x}/{y}.png', {
+	attribution: '&copy;2012 Esri & Stamen, Data from OSM and Natural Earth',
+	subdomains: '0123',
+	minZoom: 2,
+	maxZoom: 18
+    }).addTo(map);
+    
     //// ADDING USA 
     base_USA = omnivore.geojson('biomass_data/other_states-simple.json')
         .on('ready', function(go) {
@@ -74,9 +82,9 @@ function buildMap() {
                     polygon.setStyle ( {
                                     color: '#C3C3BE', 
                                     opacity: 1,
-                                    weight: 2, 
+                                    weight: 1, 
                                     fillColor: '#D9D8D2',  
-                                    fillOpacity: 1 
+                                    fillOpacity: .7 
                         }); 
                 }) 
         })
@@ -99,7 +107,7 @@ function buildMap() {
                 })
         })
     .setZIndex(0)
-    .addTo(map);
+    //.addTo(map);
     
     
     //// ADDING COUNTIES 
@@ -150,7 +158,7 @@ function buildMap() {
                 }); 
         })
         .setZIndex(7)
-        .addTo(map)
+        //.addTo(map)
         
     buildToggle(cities, '  City Labels', 'cityLabel-sm fa fa-font fa-lg sp')
         
@@ -275,19 +283,21 @@ function buildMap() {
      
     map.on('zoomend', function(){
             if (map.getZoom()>9) {
-                map.removeLayer(states);
+                //map.removeLayer(states);
+                map.removeLayer(base);
                 map.removeLayer(base_USA);
-                map.removeLayer(cities);
+                //map.removeLayer(cities);
                 map.removeLayer(hydro);
                 image.addTo(map);
             } else if (map.getZoom()<=9){
                 map.removeLayer(counties)
                 map.removeLayer(image);
-                states.addTo(map);
+                //states.addTo(map);
+                base.addTo(map);
                 base_USA.addTo(map);
                 counties.addTo(map);
                 hydro.addTo(map);
-                cities.addTo(map)
+                //cities.addTo(map)
             } else if (map.getZoom()<=5) {
                 map.removeLayer(cities)
             }
